@@ -1,0 +1,168 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Limb : MonoBehaviour
+{
+    BoxCollider bc;
+    Rigidbody rb;
+    string connections;
+    string[] points;
+    int startJoint;
+    int endJoint;
+    Vector3 startPoint;
+    Vector3 endPoint;
+    Vector3 newPos;
+    float prevTheta;
+    float prevAlpha;
+    float theta;
+    float alpha; 
+    bool collided;
+    bool start;
+    int waitCount;
+    GameObject scaler;
+    // Start is called before the first frame update
+    void Start()
+    {
+	start = false;
+	waitCount = 0;
+	var renderer = this.GetComponent<Renderer>();
+        renderer.material.SetColor("_Color", Color.red);
+	bc = GetComponent<BoxCollider>();
+	//rb = GetComponent<Rigidbody>();
+	//rb.isKinematic = true;
+	//rb.useGravity = false;
+	//rb.angularDrag = 0f;
+	//rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+	connections = this.name;
+  	points = connections.Split(',');
+	startJoint = Int32.Parse(points[0]);
+	endJoint = Int32.Parse(points[1]);
+	startPoint = GameObject.Find(points[0]).transform.position;
+	endPoint = GameObject.Find(points[1]).transform.position;
+	newPos = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+	//rb.MovePosition(newPos);
+	//this.transform.position = newPos;
+	float xScale = GameObject.Find(points[1]).GetComponent<RoboJoint3>().length - (float)0.4;
+	//bc.size = new Vector4( 0.6f, 0.1f, 0.1f);
+	//this.transform.localScale = new Vector3(xScale, (float)0.5, (float)0.5);
+	//rb.MoveRotation(GameObject.Find(points[0]).transform.rotation);
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+	if (waitCount < 150) {
+		waitCount++;
+	}
+	else {
+	waitCount++;
+	if (start == false){
+		//rb.isKinematic = true;
+		startPoint = GameObject.Find(points[0]).transform.position;
+		endPoint = GameObject.Find(points[1]).transform.position;
+		newPos = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+		//rb.MovePosition(newPos);
+		this.transform.position = newPos;
+	float xScale = GameObject.Find(points[1]).GetComponent<RoboJoint3>().length - (float)0.8;
+	//bc.size = new Vector4( 0.6f, 0.1f, 0.1f);
+	//this.transform.localScale = new Vector3(xScale, (float)0.5, (float)0.5);
+		start = false;
+	}	
+		if (start == false) {
+			//this.transform.SetParent(GameObject.Find(points[0]).transform);
+			float xScale = GameObject.Find(points[1]).GetComponent<RoboJoint3>().length*0.85f;
+			scaler = createScaler(this, GameObject.Find(points[0]), xScale);	
+			//ConfigurableJoint cj = this.gameObject.AddComponent<ConfigurableJoint>();
+			//cj.connectedBody = GameObject.Find(points[0]).GetComponent<Rigidbody>()	;
+			//cj.xMotion=ConfigurableJointMotion.Locked;
+			//cj.yMotion=ConfigurableJointMotion.Locked;
+			//cj.zMotion=ConfigurableJointMotion.Locked;
+			//cj.angularXMotion=ConfigurableJointMotion.Locked;
+			//cj.angularYMotion=ConfigurableJointMotion.Locked;
+			//cj.angularZMotion=ConfigurableJointMotion.Locked;
+		}
+		start = true;
+		//rb.isKinematic = false;	
+	//this.transform.position = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+	if (collided) {
+		//rb.MovePosition(currPos);
+		Debug.Log("collided");
+		//GameObject.Find(points[1]).GetComponent<RoboJoint2>().theta = prevTheta;
+		//rb.MoveRotation(GameObject.Find(points[0]).transform.rotation);
+	}
+	startPoint = GameObject.Find(points[0]).transform.position;
+	endPoint = GameObject.Find(points[1]).transform.position;
+	newPos = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+	//newPos.Normalize();
+	Vector3 currPos = this.transform.position;	
+	Vector3 direction = newPos - currPos;
+	Ray ray = new Ray(currPos, direction);
+	RaycastHit hit;
+	if (!Physics.Raycast(ray,out hit, direction.magnitude * 2) || hit.collider.gameObject.name == this.name){
+		//Debug.Log("moving");
+	//rb.MovePosition(newPos);
+		//rb.MovePosition(newPos);// = (newPos - this.transform.position).normalized*10;
+		//float xScale = GameObject.Find(points[1]).GetComponent<RoboJoint3>().length - (float)0.4;
+		//bc.size = new Vector4( xScale, 0.1f, 0.1f);
+		//scaler.transform.localScale = new Vector3(xScale, (float)0.5, (float)0.5);
+		//this.transform.rotation =GameObject.Find(points[0]).transform.rotation; 
+		//rb.MoveRotation(GameObject.Find(points[0]).transform.rotation);
+		prevTheta = theta;
+	}
+	else{
+		//Debug.Log("hit------------------------------------");
+		//Debug.Log(hit.collider.gameObject.name + " " + this.name);
+		//rb.MovePosition(hit.point);
+		//rb.MovePosition(newPos);
+		//rb.velocity = new Vector3(0,0,0);
+	
+		//if (waitCount > 300){
+		//	Time.timeScale=0;
+		//}
+	}
+    }
+    }
+
+
+	private void OnCollisionEnter(Collision col){
+//	Debug.Log( "this: " + this.name + " collided with : " + col.collider.gameObject.name);
+	if (start){
+		//collided = true;
+		//GameObject.Find(points[1]).GetComponent<RoboJoint2>().collided = true;
+		Debug.Log("hit------------------------------------");
+		//Debug.Log(hit.collider.gameObject.name + " " + this.name);
+		//rb.MovePosition(hit.point);
+		//rb.MovePosition(newPos);
+		//rb.velocity = new Vector3(0,0,0);
+	
+		//if (waitCount > 300){
+		//Time.timeScale=0;
+	}
+	//Debug.Log( "collide (tag) : " + col.collider.gameObject.tag );
+	//rb.MovePosition(this.transform.position);
+	//this.enabled = false;
+	//rb.MovePosition(oldPos);
+	}
+
+	void OnCollisionExit(Collision other){
+        	print("No longer in contact with " + other.transform.name);
+		collided = false;
+		GameObject.Find(points[1]).GetComponent<RoboJoint3>().collided = false;
+	}
+
+	private static GameObject createScaler(Limb obj, GameObject newParent, float xScale){
+		GameObject parentObject = new GameObject(); //create an 'empty' object
+		parentObject.name = "Scaler " + obj.name;
+		parentObject.transform.parent = newParent.transform;
+		//parentObject.transform.localScale = obj.transform.localScale;
+		Vector3 currScale = newParent.transform.parent.transform.localScale;
+		parentObject.transform.localScale = new Vector3((float)(1/currScale.x),(float)(1/currScale.y),(float)(1/currScale.z));//obj.transform.localScale;
+		parentObject.transform.localPosition = new Vector3(0,0,0);
+		obj.transform.parent = parentObject.transform;
+		obj.transform.localScale = new Vector3(xScale,0.5f,0.5f);
+		//parentObject.transform.localScale = new Vector3((float)0.2,(float)0.2,(float)0.2);	
+		return parentObject;
+	}
+    
+}

@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class RoboJoint : MonoBehaviour
+{
+	public float[,] DHTable;
+	[Range(-180f, 180f)]
+	public float theta;
+	float smooth = 100.0f;
+	[Range(-180f, 180f)]
+	public float alpha;
+    // Start is called before the first frame update
+    void Start()
+    {
+		theta = GameObject.Find("Slider").GetComponent<Slider>().value; // both these should be created from the robi file
+		alpha = GameObject.Find("Slider (1)").GetComponent<Slider>().value;
+		DHTable = new float[,]{{theta,0,0,alpha},{0,0,0,0},{0,0,0,0},{0,0,0,0}}; // theta, d, length, alpha
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+	theta = GameObject.Find("Slider").GetComponent<Slider>().value; // both these should be created from the robi file
+	alpha = GameObject.Find("Slider (1)").GetComponent<Slider>().value;
+	DHTable[0,0] = theta;
+	DHTable[0,3] = alpha;
+	float[,] arr = trans(DHTable[0,0], DHTable[0,1], DHTable[0,2], DHTable[0,3]);
+	/*int rowLength = arr.GetLength(0);
+        int colLength = arr.GetLength(1);
+	string str = "";
+
+        for (int i = 0; i < rowLength; i++)
+        {
+            for (int j = 0; j < colLength; j++)
+            {
+                str += (string.Format("{0} ", arr[i, j]));
+            }
+            str += ("\n");
+        }
+	Debug.Log(str); */
+	Quaternion q = QuaternionFromMatrix(arr);
+	this.transform.rotation =  Quaternion.Slerp(this.transform.rotation, q,  Time.deltaTime * smooth);
+    }
+
+	public float r2d(float deg){
+		return deg/180*(float)Math.PI;
+	}
+
+	public float[,] trans(float theta, float d, float a, float alpha){
+		float[,] matrix = {{Mathf.Cos(r2d(theta)), -Mathf.Sin(r2d(theta)), 0, a},
+				{Mathf.Sin(r2d(theta))*Mathf.Cos(r2d(alpha)), Mathf.Cos(r2d(theta))*Mathf.Cos(r2d(alpha)), -Mathf.Sin(r2d(alpha)), -Mathf.Sin(r2d(alpha))*d},
+				{Mathf.Sin(r2d(theta))*Mathf.Sin(r2d(alpha)), Mathf.Cos(r2d(theta))*Mathf.Sin(r2d(alpha)), Mathf.Cos(r2d(alpha)), Mathf.Cos(r2d(alpha))*d},
+				{0,0,0,1}};
+		//double[,] matrix2 = {{Math.Cos((double)r2d(theta)), Math.Sin((double)r2d(theta))*Math.Cos((double)r2d(alpha)), Math.Sin((double)r2d(theta))*Math.Sin((double)r2d(alpha))}};
+	return matrix;
+	}
+
+	public static Quaternion QuaternionFromMatrix(float[,] m) {
+		// Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+		Quaternion q = new Quaternion();
+		q.w = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] + m[1,1] + m[2,2] ) ) / 2; 
+		q.x = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] - m[1,1] - m[2,2] ) ) / 2; 
+		q.y = Mathf.Sqrt( Mathf.Max( 0, 1 - m[0,0] + m[1,1] - m[2,2] ) ) / 2; 
+		q.z = Mathf.Sqrt( Mathf.Max( 0, 1 - m[0,0] - m[1,1] + m[2,2] ) ) / 2; 
+		q.x *= Mathf.Sign( q.x * ( m[2,1] - m[1,2] ) );
+		q.y *= Mathf.Sign( q.y * ( m[0,2] - m[2,0] ) );
+		q.z *= Mathf.Sign( q.z * ( m[1,0] - m[0,1] ) );
+		return q;
+	}
+}

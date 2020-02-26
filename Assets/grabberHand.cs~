@@ -1,0 +1,52 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+
+public class grabberHand : MonoBehaviour
+{
+    GameObject parent;
+    Rigidbody rb;
+    public float grab;
+    private float origScale;
+    Slider grabSlider;
+    bool firstRun;
+    ConfigurableJoint joint;
+    JointDrive drive;
+    // Start is called before the first frame update
+    void Start()
+    {
+    	parent = this.transform.parent.gameObject;
+        rb = GetComponent<Rigidbody>();
+	//rb.MovePosition(parent.transform.position);
+	joint = GetComponent<ConfigurableJoint>();
+	//grab = 10;
+	drive = new JointDrive();
+	drive.mode = JointDriveMode.Position;
+	drive.positionSpring = 100;
+	drive.positionDamper = 50;
+	drive.maximumForce = 100;
+	joint.zDrive = drive;
+	float origScale = this.transform.localScale.z;
+	firstRun = true;
+	//string slider ="Slider (" + (GameObject.Find("0").GetComponent<RoboJoint>()) + ")"; 
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+	if (firstRun){	
+		string sliderNo ="Slider (" + (GameObject.Find("0").GetComponent<RoboJoint>().DHTable.Length/2).ToString() + ")"; 
+		grabSlider = GameObject.Find(sliderNo).GetComponent<Slider>();
+		firstRun = false;
+	}
+	grab = grabSlider.value; // both these should be created from the robi file
+	Vector3 tempScale = new Vector3(0,0,0);
+	tempScale.z = grab/100f;
+        //this.transform.localScale = tempScale;
+	//rb.MovePosition(parent.transform.position + transform.TransformDirection(new Vector3 (0.1f, 0f ,0f)));// change to half scale later
+	joint.targetPosition = Math.Sign(this.transform.localPosition.z)*tempScale*(parent.transform.lossyScale.z)/2;
+    }
+}

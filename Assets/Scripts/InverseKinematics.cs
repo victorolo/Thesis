@@ -1,0 +1,47 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InverseKinematics : MonoBehaviour
+{
+    public GameObject[] joints;
+    private GameObject[] jointRots;
+    public GameObject target;
+
+    public float EPS = 0.5f;
+    public float step = 1;//0.015f;
+
+    private float[] angles;
+    private int count = 0;
+    public int countMax = 1000;
+    //private bool startJT_Method_Flag = false;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+	target = GameObject.Find("Cube (1)");
+	int i = 0;
+	GameObject currJoint = GameObject.Find(i.ToString());
+	joints = new GameObject[4];
+	while (currJoint != null){
+		joints[i] = currJoint;
+		i ++;
+		currJoint = GameObject.Find(i.ToString());
+	}
+	//jointRots = new GameObject[joints.Length-1];
+	//for (int i = 0; i < jointRots.Length; i++)
+	//{
+	//	GameObject tmp = new GameObject(joints[i + 1].name + "_Rot");
+	//	tmp.transform.position = joints[i+1].transform.position;
+	//	tmp.transform.parent = joints[i].transform;
+	//	jointRots[i] = tmp;            
+	//}
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}

@@ -1,0 +1,50 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Joint : MonoBehaviour
+{
+	float[,] DHTable;
+	public float theta;
+    // Start is called before the first frame update
+    void Start()
+    {
+		theta = 0;
+		float pos0 = GameObject.Find("Cylinder").transform.position.y;
+		float pos1 = GameObject.Find("Cylinder (1)").transform.position.y;
+		float pos2 = GameObject.Find("Cylinder (2)").transform.position.y;
+		float pos3 = GameObject.Find("Cube (1)").transform.position.y;
+		DHTable = new float[,]{{theta,0,pos1-pos0,0},{0,0,pos2-pos1,-90},{0,0,pos3-pos2,0}}; 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+		float[,] arr = transform(DHTable[0,0,], DHTable[0,1], DHTable[0,2], DHTable[0,3]);
+		int rowLength = arr.GetLength(0);
+        int colLength = arr.GetLength(1);
+
+        for (int i = 0; i < rowLength; i++)
+        {
+            for (int j = 0; j < colLength; j++)
+            {
+                Console.Write(string.Format("{0} ", arr[i, j]));
+            }
+            Console.Write(Environment.NewLine + Environment.NewLine);
+        }
+        Console.ReadLine();
+    }
+
+	public float r2d(float deg){
+		return deg/180*Math.PI;
+	}
+
+	public float[,] transform(float theta, float d, float a, float alpha){
+		float[,] matrix = {{math.cos(r2dtheta), -Math.Sin(r2d(theta)), 0, a -1},
+				{Math.Sin(r2d(theta))*Math.Cos(alpha), Math.Cos(r2d(theta))*Math.Cos(r2d(alpha)), -Math.Sin(r2d(alpha)), -Math.Sin(r2d(alpha))*d},
+				{Math.Sin(r2d(theta))*Math.Sin(alpha), Math.Cos(r2d(theta))*Math.Sin(r2d(alpha)), Math.Cos(r2d(alpha)), Math.Cos(r2d(alpha))*d},
+				{0,0,0,1}};
+		float[,] matrix2 = {{math.cos(r2dtheta), Math.Sin(r2d(theta))*Math.Cos(r2d(alpha)), Math.Sin(r2d(theta))*Math.Sin(r2d(alpha))}};
+	return matrix;
+	}
+}

@@ -1,0 +1,17 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GUI : MonoBehaviour
+{
+    public float thet0, thet1, thet2, thet3;
+
+    // Start is called before the first frame update
+    void OnGUI()
+    {
+	thet0 = GUI.HorizontalSlider(new Rect(25, 25, 100, 30), hSliderValue, -180.0F, 180.0F);
+	thet1 = GUI.HorizontalSlider(new Rect(25, 25, 100, 30), hSliderValue, -180.0F, 180.0F);
+	thet2 = GUI.HorizontalSlider(new Rect(25, 25, 100, 30), hSliderValue, -180.0F, 10.08F);
+	thet3 = GUI.HorizontalSlider(new Rect(25, 25, 100, 30), hSliderValue, -180.0F, 180.0F);
+    }
+}
