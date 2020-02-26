@@ -11,7 +11,8 @@ public class RoboJoint3 : MonoBehaviour
 	//float smooth = 1.0f;
 	float smooth = 100.0f;
 	public float length;
-	private float targetTheta;
+	public float targetTheta;
+	//private float targetTheta;
 	[Range(-180f, 180f)]
 	public float alpha;
 	private float targetAlpha;
