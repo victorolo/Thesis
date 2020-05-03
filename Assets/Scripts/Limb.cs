@@ -67,7 +67,8 @@ public class Limb : MonoBehaviour
 		//rb.isKinematic = true;
 		startPoint = GameObject.Find(points[0]).transform.position;
 		endPoint = GameObject.Find(points[1]).transform.position;
-		newPos = new Vector3((startPoint.x + endPoint.x)/2f+offsetX, (startPoint.y + endPoint.y)/2f, startPoint.z); 
+		//newPos = new Vector3((startPoint.x + endPoint.x)/2f+offsetX, (startPoint.y + endPoint.y)/2f, startPoint.z); 
+		newPos = startPoint;
 		//rb.MovePosition(newPos);
 		oldLen = GameObject.Find(points[1]).GetComponent<RoboJoint3>().length;
 		GameObject.Find(points[1]).GetComponent<RoboJoint3>().length += offsetX;
@@ -105,7 +106,8 @@ public class Limb : MonoBehaviour
 	}
 	startPoint = GameObject.Find(points[0]).transform.position;
 	endPoint = GameObject.Find(points[1]).transform.position;
-	newPos = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+	//newPos = new Vector3(startPoint.x + endPoint.x, startPoint.y + endPoint.y, startPoint.z + endPoint.z) / 2f; 
+	newPos = startPoint;
 	//newPos.Normalize();
 	Vector3 currPos = this.transform.position;	
 	Vector3 direction = newPos - currPos;
@@ -181,7 +183,8 @@ public class Limb : MonoBehaviour
 		parentObject.transform.localScale = new Vector3(oScale, oScale, oScale);//obj.transform.localScale;
 		parentObject.transform.localPosition = new Vector3(0,0,0);
 		obj.transform.parent = parentObject.transform;
-		obj.transform.localScale = new Vector3(xScale,otherScale,otherScale);
+		//obj.transform.localScale = new Vector3(xScale,otherScale,otherScale);
+		obj.transform.localScale = new Vector3(otherScale,otherScale,otherScale);
 		//parentObject.transform.localScale = new Vector3((float)0.2,(float)0.2,(float)0.2);	
 		return parentObject;
 	}

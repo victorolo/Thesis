@@ -2,6 +2,25 @@
 
 public static class Tools {
 
+	public static Vector3 GetDimensions(GameObject obj)
+	{
+	Vector3 min = Vector3.one * Mathf.Infinity;
+	Vector3 max = Vector3.one * Mathf.NegativeInfinity;
+
+	Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
+
+	for (int i = 0; i < mesh.vertices.Length; i++)
+		{
+			Vector3 vert = mesh.vertices[i];
+			min = Vector3.Min(min, vert);
+			max = Vector3.Max(max, vert);
+		}
+
+		// the size is max-min multiplied by the object scale:
+		return Vector3.Scale(max - min, obj.transform.localScale);
+	}
+
+
     public static float[,] M_Transpose(float[,] matrix)
     {
         int w = matrix.GetLength(0);

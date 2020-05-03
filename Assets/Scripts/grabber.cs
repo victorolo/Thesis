@@ -27,7 +27,10 @@ public class grabber : MonoBehaviour
         rb = this.gameObject.AddComponent<Rigidbody>();
 	rb.useGravity = false;
 	//rb.MovePosition(parent.transform.position + new Vector3(parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
-	this.transform.position = (parent.transform.position + new Vector3(parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
+	Vector3 sizes2 = Tools.GetDimensions(gameObject);
+	Vector3 sizes = Tools.GetDimensions(parent);
+	//this.transform.position = (parent.transform.position + new Vector3(parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
+	this.transform.position = (parent.transform.position + new Vector3(sizes.x,0,0));
 	//joint = GetComponent<ConfigurableJoint>();
 	//grab = 10;
 	rb.isKinematic = true;
@@ -51,10 +54,15 @@ public class grabber : MonoBehaviour
 	else {
 		rend = parent.GetComponent<Renderer>();
 		Renderer thisRend = GetComponent<Renderer>();
-		Vector3 sizes = rend.bounds.max;
-		Vector3 thisSizes = thisRend.bounds.max;
+		//Vector3 sizes = rend.bounds.max;
+		//Vector3 thisSizes = thisRend.bounds.max;
 		if (waitCount < 150){
-			this.transform.position = (parent.transform.position + new Vector3(0.1f + parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
+		//this.transform.position = (parent.transform.position + new Vector3(parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
+			Vector3 sizes2 = Tools.GetDimensions(gameObject);
+			Vector3 sizes = Tools.GetDimensions(parent);
+			Debug.Log(parent.transform.position + new Vector3(sizes.x,0,0));
+			this.transform.position = (parent.transform.position + new Vector3(sizes.x,0,0));
+	//		this.transform.position = (parent.transform.position + new Vector3(0.1f + parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
 			//this.transform.position = new Vector3(sizes.x + this.transform.localScale.x/2 + 0.1f,0,0);
 			
 		}
