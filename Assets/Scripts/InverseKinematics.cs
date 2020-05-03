@@ -10,20 +10,25 @@ public class InverseKinematics : MonoBehaviour
     public GameObject target;
 
     public float EPS = 0.5f;
-    public float step = 1;//0.015f;
+    public float step = 0.015f;
 
     private float[] angles;
+    private float[] anglesAlpha;
     private int count = 0;
-    public int countMax = 1000;
-    private bool contIK = false;
-
+    public int countMax = 200;
+    public bool contIK = false;
+    public static bool collided;
+    private int waitCount;
+    public int jointCount;
     // Start is called before the first frame update
     void Start()
     {
+	waitCount = 0;
+	collided = false;
 	target = GameObject.Find("Cube (1)");
 	int i = 0;
 	GameObject currJoint = GameObject.Find(i.ToString());
-	joints = new GameObject[4];
+	joints = new GameObject[jointCount];
 	while (currJoint != null){
 		joints[i] = currJoint;
 		i ++;
@@ -36,11 +41,14 @@ public class InverseKinematics : MonoBehaviour
     {
        if (contIK) {
             iterate_IK();
+	    //RobotJoint.IKReverseTrue();
         }
     }
 
     public void btn_StartIK() {
         start_IK();
+	RoboJoint3.IKReverse = true;
+	GameObject.Find("IK").GetComponentInChildren<Text>().text = "Running";
     }
 
     private void start_IK()
@@ -51,6 +59,11 @@ public class InverseKinematics : MonoBehaviour
 	angles[0] = joints[0].GetComponent<RoboJoint>().theta;
 	for (int i = 1; i < joints.Length; i ++){
 		angles[i] = joints[i].GetComponent<RoboJoint3>().theta;
+	}
+	anglesAlpha = new float[joints.Length];
+	anglesAlpha[0] = joints[0].GetComponent<RoboJoint>().alpha;
+	for (int i = 1; i < joints.Length; i ++){
+		anglesAlpha[i] = joints[i].GetComponent<RoboJoint3>().alpha;
 	}
     }
 	
@@ -64,11 +77,13 @@ public class InverseKinematics : MonoBehaviour
 	{
 		Debug.Log("Cycle Count: " + count.ToString());
 		contIK = false;
+		GameObject.Find("IK").GetComponentInChildren<Text>().text = "Inverse Kinematics";
 	}
 	if (count >= countMax)
 	{
 		Debug.Log("Hit Cycle Count: " + count.ToString());
 		contIK = false;
+		GameObject.Find("IK").GetComponentInChildren<Text>().text = "Inverse Kinematics";
 	}
     }
 
@@ -76,28 +91,66 @@ public class InverseKinematics : MonoBehaviour
     {
 	float[] dO = new float[angles.Length];
 	float[] angleDiff = new float[angles.Length];
-	dO = GetDeltaOrientation();
+	dO = GetDeltaOrientation(true);
 	for (int i = 0; i < dO.Length; i++) {
 		angles[i] = dO[i] * step/(dO.Length - i);
-		angleDiff[i] = dO[i] * step/(dO.Length - i);
+		angleDiff[i] = Mathf.Ceil(dO[i] * step/(dO.Length - i));
+		Debug.Log(angleDiff[i]);
 	}
         
 	// update angles
-	rotateLinks(angleDiff);
+	//if (!collided){
+		rotateLinks(angleDiff);
+	//}
 
+	float[] dOAlpha = new float[anglesAlpha.Length];
+	float[] angleDiffAlpha = new float[anglesAlpha.Length];
+	dOAlpha = GetDeltaOrientation(false);
+	for (int i = 0; i < dOAlpha.Length; i++) {
+		anglesAlpha[i] = dOAlpha[i] * step/(dOAlpha.Length - i);
+		angleDiffAlpha[i] = Mathf.Ceil(dOAlpha[i] * step/(dOAlpha.Length - i));
+		//Debug.Log(angleDiff[i]);
+	
+	}
+        
+	// update angles
+	//if (!collided){
+		rotateLinksAlpha(angleDiffAlpha);
+	//}
+	//else{
+		//collided = false;
+	//	waitCount ++;
+	//}
+	//if (waitCount == 4){
+	//	collided = false;
+	//	waitCount = 0;
+	if (collided){
+		RoboJoint3.IKReverse = false;
+	}
 	count++;
     }
 
-    private float[] GetDeltaOrientation()
+    private float[] GetDeltaOrientation(bool Theta)
     {
-	float[,] Jt = GetJacobianTranspose();
+	float[,] Jt;
+	if (Theta){
+		Jt = GetJacobianTranspose();
+	}
+	else{
+		Jt = GetJacobianTransposeAlpha();
+	}
+    
 
 	Vector3 V = (target.transform.position- joints[joints.Length - 1].transform.position);
 
 	float[,] dO = Tools.M_Multiply(Jt, new float[,] { { V.x }, { V.y }, { V.z  } });
-	Debug.Log( Jt);
-	Debug.Log(V);//dO[0, 0] + " " + dO[1, 0] + " " + dO[2, 0]);
-	return new float[] { dO[0, 0], dO[1, 0], dO[2, 0] };
+	//Debug.Log(V);//dO[0, 0] + " " + dO[1, 0] + " " + dO[2, 0]);
+	float[] dORow = new float[jointCount];
+
+	for (int i = 0; i < dO.GetLength(0); i ++){
+		dORow[i] = dO[i,0];
+	}
+	return dORow;
     }
 
     private float[,] GetJacobianTranspose() 
@@ -106,20 +159,20 @@ public class InverseKinematics : MonoBehaviour
 
 	for (int i = 0; i < jacRows.Length; i++){
 		jacRows[i] = Vector3.Cross(joints[i].transform.forward, (joints[joints.Length - 1].transform.position - joints[i].transform.position));
-
 	}
 
         float[,] matrix = new float[3,jacRows.Length];
 	
 	matrix = Tools.M_Populate(matrix, jacRows);
-	
 	return Tools.M_Transpose(matrix);
     }
 
     private void rotateLinks(float[] angleDiff)
     {
         float newAngle = angleDiff[0];
-	GameObject.Find("Slider").GetComponent<Slider>().value = angleDiff[0] + joints[0].GetComponent<RoboJoint>().theta;
+	Slider slider0 = GameObject.Find("Slider (0)").GetComponent<Slider>();
+	if (slider0.interactable)
+	slider0.value = -180 + (GameObject.Find("Slider (0)").GetComponent<Slider>().value + angleDiff[0] + 180)%360;// + joints[0].GetComponent<RoboJoint>().theta;
 	for (int i = 1; i < joints.Length; i++)
 	{            
             //Vector3 upDir = joints[i].transform.right;
@@ -129,12 +182,50 @@ public class InverseKinematics : MonoBehaviour
 		newAngle = angleDiff[i]*(i+1);
 
 		if (newAngle != 0){
-		GameObject.Find("Slider (" + (i*2).ToString() + ")").GetComponent<Slider>().value = angleDiff[0] + joints[0].GetComponent<RoboJoint>().theta;
+			//Debug.Log("joint : " + i + " " + angleDiff[i]*(i+1));
+			Slider slider = GameObject.Find("Slider (" + (i*2).ToString() + ")").GetComponent<Slider>();
+			if (slider.interactable)
+			slider.value = -180 + (GameObject.Find("Slider (" + (i*2).ToString() + ")").GetComponent<Slider>().value + angleDiff[i] + 180)%360; //+ joints[i].GetComponent<RoboJoint3>().theta;
 		}
 	}
     }
 
+    private float[,] GetJacobianTransposeAlpha() 
+    {
+	Vector3[] jacRows = new Vector3[joints.Length];
+
+	for (int i = 0; i < jacRows.Length; i++){
+		jacRows[i] = Vector3.Cross(joints[i].transform.right, (joints[joints.Length - 1].transform.position - joints[i].transform.position));
+	}
+
+        float[,] matrix = new float[3,jacRows.Length];
+	
+	matrix = Tools.M_Populate(matrix, jacRows);
+	return Tools.M_Transpose(matrix);
+    }
 
 
+    private void rotateLinksAlpha(float[] angleDiff)
+    {
+        float newAngle = angleDiff[0];
+	Slider slider0 = GameObject.Find("Slider (1)").GetComponent<Slider>();
+	if (slider0.interactable)
+	slider0.value = -180 + (GameObject.Find("Slider (1)").GetComponent<Slider>().value + angleDiff[0] + 180)%360;// + joints[0].GetComponent<RoboJoint>().theta;
+	for (int i = 1; i < joints.Length; i++)
+	{            
+            //Vector3 upDir = joints[i].transform.right;
+
+            //Vector3 crossAxis = Vector3.Cross(upDir, (joints[i + 1].transform.position - joints[i].transform.position).normalized);
+            //float currAngle = calculateAngle(Vector3.up, joints[i + 1].transform.position, joints[i].transform.position);
+		newAngle = angleDiff[i]*(i+1);
+
+		if (newAngle != 0){
+			//Debug.Log("joint : " + i + " " + angleDiff[i]*(i+1));
+			Slider slider = GameObject.Find("Slider (" + (i*2 + 1).ToString() + ")").GetComponent<Slider>();
+			if (slider.interactable)
+			slider.value = -180 + (GameObject.Find("Slider (" + (i*2 + 1).ToString() + ")").GetComponent<Slider>().value + angleDiff[i] + 180)%360; //+ joints[i].GetComponent<RoboJoint3>().theta;
+		}
+	}
+    }
 
 }

@@ -59,5 +59,22 @@ public static class Tools {
     {
         //Debug.Log(txt);
     }
+
+    public static void printMat(float[,] arr){
+    int rowLength = arr.GetLength(0);
+    int colLength = arr.GetLength(1);
+    string arrayString = "";
+    for (int i = 0; i < rowLength; i++)
+    {
+        for (int j = 0; j < colLength; j++)
+        {
+            arrayString += string.Format("{0} ", arr[i, j]);
+        }
+        arrayString += System.Environment.NewLine + System.Environment.NewLine;
+    }
+
+    Debug.Log(arrayString);
+    
+    }
 }
 
