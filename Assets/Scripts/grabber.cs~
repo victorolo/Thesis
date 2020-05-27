@@ -60,7 +60,7 @@ public class grabber : MonoBehaviour
 		//this.transform.position = (parent.transform.position + new Vector3(parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
 			Vector3 sizes2 = Tools.GetDimensions(gameObject);
 			Vector3 sizes = Tools.GetDimensions(parent);
-			Debug.Log((parent.transform.position + new Vector3(sizes.x,0,0));
+			Debug.Log(parent.transform.position + new Vector3(sizes.x,0,0));
 			this.transform.position = (parent.transform.position + new Vector3(sizes.x,0,0));
 	//		this.transform.position = (parent.transform.position + new Vector3(0.1f + parent.transform.localScale.x/2 + this.transform.localScale.x/2,0,0));
 			//this.transform.position = new Vector3(sizes.x + this.transform.localScale.x/2 + 0.1f,0,0);
@@ -80,6 +80,8 @@ public class grabber : MonoBehaviour
 		waitCount++;
 		//grab = grabSlider.value; // both these should be created from the robi file
 		Vector3 tempScale = this.transform.localScale;
+		Physics.IgnoreCollision(GameObject.Find("hand 1").GetComponent<Collider>(), this.GetComponent<Collider>());
+		Physics.IgnoreCollision(GameObject.Find("hand 2").GetComponent<Collider>(), this.GetComponent<Collider>());
 		//tempScale.z = (grab+10)/100f;
 	//this.transform.localScale = tempScale;
 		//rb.MovePosition(parent.transform.position + transform.TransformDirection(new Vector3 (0.1f, 0f ,0f)));// change to half scale later

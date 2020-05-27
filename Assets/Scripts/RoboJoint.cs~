@@ -52,7 +52,7 @@ public class RoboJoint : MonoBehaviour
 		    stop = false;
 	    }
 	    prevStop = stop;
-	targetTheta = GameObject.Find("Slider (0)").GetComponent<Slider>().value; // both these should be created from the robi file
+	targetTheta = GameObject.Find("Slider (0)").GetComponent<Slider>().value/2; // both these should be created from the robi file
 	targetAlpha = GameObject.Find("Slider (1)").GetComponent<Slider>().value;
 
 	if (Mathf.Abs(prevTheta[0]-theta) >= 1.5f){
@@ -133,7 +133,7 @@ public class RoboJoint : MonoBehaviour
 	q = QuaternionFromMatrix(arr);
 	finalRot = Quaternion.Slerp(this.transform.rotation, q,  Time.deltaTime * smooth);
 	rb.MoveRotation(finalRot);	
-	//rb.MovePosition(this.transform.position);
+	rb.MovePosition(new Vector3 (0f,0f,0f));
 	//StartCoroutine(Example());
     }
 

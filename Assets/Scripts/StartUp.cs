@@ -15,7 +15,7 @@ public class StartUp : MonoBehaviour
     void Start()
     {
 	UnityEngine.Object bPrefab = Resources.Load("Button");
-	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(421.6f, 269.2f, 0), Quaternion.identity);
+	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(320.6f, 269.2f, 0), Quaternion.identity);
        	newButt.transform.SetParent(GameObject.Find("Canvas").transform, false);
 	newButt.GetComponent<Button>().onClick.AddListener(delegate { Load(); });
     }
@@ -58,7 +58,7 @@ public class StartUp : MonoBehaviour
 	InverseKinematics ik = parentObj.AddComponent<InverseKinematics>();
 	//DontDestroyOnLoad(parentObj);
 	UnityEngine.Object bPrefab = Resources.Load("Button");
-	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(421.6f ,221, 0), Quaternion.identity);
+	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(320.6f ,221, 0), Quaternion.identity);
        	newButt.transform.SetParent(GameObject.Find("Canvas").transform, false);
 	newButt.GetComponentInChildren<Text>().text = "Inverse Kinematics";
 	newButt.name = "IK";
@@ -79,8 +79,8 @@ public class StartUp : MonoBehaviour
 			inputs[count, count2] = word;
 			count2 ++;
 		}	
+       		Debug.Log(count + " " + line);
 		count ++;
-       		//Debug.Log(line);
     	}
 
 	int sliderCount = 0;
@@ -125,8 +125,11 @@ public class StartUp : MonoBehaviour
 			//rbj2.alpha = float.Parse(inputs[armsNo+i,2], CultureInfo.InvariantCulture);
 
 		}
-		obj2.GetComponent<MeshRenderer>().enabled = false;
-		obj2.GetComponent<Collider>().enabled = false;
+			
+		if (inputs[7*armsNo+11,i*2] == "0"){
+			obj2.GetComponent<MeshRenderer>().enabled = false;
+			obj2.GetComponent<Collider>().enabled = false;
+		}
 		UnityEngine.Object pPrefab = Resources.Load("Slider (1)"); // note: not .prefab!
 		GameObject newSlider = (GameObject)GameObject.Instantiate(pPrefab, new Vector3(98, -10 -sliderCount*20, 0), Quaternion.identity);
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
@@ -143,7 +146,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Arm " + (i).ToString() + "- Theta";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
@@ -166,7 +169,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider2.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Arm " + (i).ToString() + "- Alpha";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
@@ -193,7 +196,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider8.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Slider (" + (i).ToString() + ") length";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
@@ -202,7 +205,7 @@ public class StartUp : MonoBehaviour
 			}
 		}
 	
-		GameObject obj3 = loadAndDisplayMesh(inputs[4*armsNo+3,0].Replace("\r", ""));
+		GameObject obj3 = loadAndDisplayMesh(inputs[5*armsNo+6,0].Replace("\r", ""));
 		obj3.AddComponent<MeshCollider>();
     		obj3.GetComponent<MeshCollider>().convex = true;
 		obj3.name = (armsNo).ToString();
@@ -213,6 +216,11 @@ public class StartUp : MonoBehaviour
 		rbj3.d = float.Parse(inputs[armsNo*2 ,1], CultureInfo.InvariantCulture);
 		rbj3.otherScale = Int32.Parse(inputs[armsNo, 2]);
 		obj3.transform.SetParent(parentObj.transform);
+		//Debug.Log(" HERHE " + (inputs[7*armsNo+12,0].Contains("0")));
+		//Debug.Log(" HERHE " + (String.Compare(inputs[7*armsNo+12,0],"1")));
+		if (inputs[7*armsNo+12,0].Contains("1")){
+			rbj3.rotGripper = false;	
+		}
 		UnityEngine.Object pPrefab2 = Resources.Load("Slider (1)"); // note: not .prefab!
 		GameObject newSlider3 = (GameObject)GameObject.Instantiate(pPrefab2, new Vector3(98, -10 -sliderCount*20, 0), Quaternion.identity);
 		sliderCount ++;
@@ -228,7 +236,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider3.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Hand " + (armsNo).ToString() + "- Theta";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
@@ -248,7 +256,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider4.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Hand " + (armsNo).ToString() + "- Alpha";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
@@ -279,7 +287,7 @@ public class StartUp : MonoBehaviour
 		//newSlider4.label = "Slider (" + (armsNo).ToString() + ") Alpha"; 
 		GameObject textObj2 = new GameObject("myTextGO");
 		textObj2.transform.SetParent(newSlider5.transform);
-		textObj2.transform.localPosition = new Vector3(150f,-42f,0f);
+		textObj2.transform.localPosition = new Vector3(150f,-32f,0f);
 		Text myText2 = textObj2.AddComponent<Text>();
 		myText2.text = "Slider grab";
 		myText2.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
@@ -300,7 +308,7 @@ public class StartUp : MonoBehaviour
 		else {
 			GameObject textObj = new GameObject("myTextGO");
 			textObj.transform.SetParent(newSlider9.transform);
-			textObj.transform.localPosition = new Vector3(150f,-42f,0f);
+			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Slider (" + (armsNo).ToString() + ") length";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
@@ -358,6 +366,24 @@ public class StartUp : MonoBehaviour
 		b7.offset.z = float.Parse(inputs[7*armsNo+9, 2], CultureInfo.InvariantCulture);
 		b7.scale = float.Parse(inputs[7*armsNo+10, 0], CultureInfo.InvariantCulture);
 
+		int bitsNo = Int32.Parse(inputs[7*armsNo+13,0]);
+		GameObject obj8;
+		for (int k = 0; k < bitsNo; k ++){
+			Debug.Log(inputs[7*armsNo+14 + k,0].Replace("\r", ""));
+			obj8 = loadAndDisplayMesh(inputs[7*armsNo+14 + k,0].Replace("\r", ""));
+			//obj8.AddComponent<MeshCollider>();
+			//obj8.GetComponent<MeshCollider>().convex = true;
+			obj8.name = "bit" + k.ToString();
+			Bits bit = obj8.AddComponent<Bits>();
+			bit.jointNum = (inputs[7*armsNo+14 + k,1].Replace("\r", ""));
+			bit.jointRotNum = Int32.Parse(inputs[7*armsNo+14 + k,2].Replace("\r", ""));
+			bit.scale = float.Parse(inputs[7*armsNo+14 + k,3].Replace("\r", ""));
+			bit.offset.x = float.Parse(inputs[7*armsNo+14 + k,4].Replace("\r", ""));
+			bit.offset.y = float.Parse(inputs[7*armsNo+14 + k,5].Replace("\r", ""));
+			bit.offset.z = float.Parse(inputs[7*armsNo+14 + k,6].Replace("\r", ""));
+			bit.useLocal = Int32.Parse(inputs[7*armsNo+14 + k,7].Replace("\r", ""));
+		}
+		
     }
 
     void attachMeshFilter(GameObject target, Mesh mesh)

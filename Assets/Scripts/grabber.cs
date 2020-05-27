@@ -80,6 +80,8 @@ public class grabber : MonoBehaviour
 		waitCount++;
 		//grab = grabSlider.value; // both these should be created from the robi file
 		Vector3 tempScale = this.transform.localScale;
+		Physics.IgnoreCollision(GameObject.Find("hand 1").GetComponent<Collider>(), this.GetComponent<Collider>(), true);
+		Physics.IgnoreCollision(GameObject.Find("hand 2").GetComponent<Collider>(), this.GetComponent<Collider>(), true);
 		//tempScale.z = (grab+10)/100f;
 	//this.transform.localScale = tempScale;
 		//rb.MovePosition(parent.transform.position + transform.TransformDirection(new Vector3 (0.1f, 0f ,0f)));// change to half scale later

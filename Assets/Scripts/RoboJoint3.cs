@@ -45,6 +45,7 @@ public class RoboJoint3 : MonoBehaviour
 	public static bool IKReverse;
 	private int partNo;
 	public bool justCollided;
+	public bool rotGripper = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -289,7 +290,12 @@ public class RoboJoint3 : MonoBehaviour
 		rb.MoveRotation((finalRot*modelRot).normalized);
 	}
 	else{
-		rb.MoveRotation((finalRot*modelRot).normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
+		if (!rotGripper){
+			rb.MoveRotation(modelRot.normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
+		}
+		else {
+			rb.MoveRotation((finalRot*modelRot).normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
+		}
 		//rb.MoveRotation(finalRot);
 	}
 	//this.transform.position = GameObject.Find("0").transform.position + transl;	
