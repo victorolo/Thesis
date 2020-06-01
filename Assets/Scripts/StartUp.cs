@@ -15,9 +15,11 @@ public class StartUp : MonoBehaviour
     void Start()
     {
 	UnityEngine.Object bPrefab = Resources.Load("Button");
-	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(320.6f, 269.2f, 0), Quaternion.identity);
+	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(-109.8f, -31.2f, 0), Quaternion.identity);
        	newButt.transform.SetParent(GameObject.Find("Canvas").transform, false);
 	newButt.GetComponent<Button>().onClick.AddListener(delegate { Load(); });
+	newButt.transform.GetComponent<RectTransform>().anchorMin = new Vector2(1,1);
+	newButt.transform.GetComponent<RectTransform>().anchorMax = new Vector2(1,1);
     }
 
     // Update is called once per frame
@@ -58,10 +60,12 @@ public class StartUp : MonoBehaviour
 	InverseKinematics ik = parentObj.AddComponent<InverseKinematics>();
 	//DontDestroyOnLoad(parentObj);
 	UnityEngine.Object bPrefab = Resources.Load("Button");
-	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(320.6f ,221, 0), Quaternion.identity);
+	GameObject newButt = (GameObject)GameObject.Instantiate(bPrefab, new Vector3(-109f , -75, 0), Quaternion.identity);
        	newButt.transform.SetParent(GameObject.Find("Canvas").transform, false);
 	newButt.GetComponentInChildren<Text>().text = "Inverse Kinematics";
 	newButt.name = "IK";
+	newButt.transform.GetComponent<RectTransform>().anchorMin = new Vector2(1,1);
+	newButt.transform.GetComponent<RectTransform>().anchorMax = new Vector2(1,1);
 	//newButt.GetComponent<Button>().onClick.AddListener(delegate { Load(); });
 	newButt.GetComponent<Button>().onClick.AddListener(() => ik.btn_StartIK());
 	var sr = new StreamReader(path);
@@ -135,6 +139,8 @@ public class StartUp : MonoBehaviour
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
 		sliderCount ++;
         	newSlider.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		newSlider.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		newSlider.name = "Slider (" + (2*i).ToString() + ")";
 		//newSlider.GetComponent<Slider>().label = "Slider (" + (i).ToString() + ") Theta";  
 		if (inputs[4*armsNo + 4 + i, 0] == "0"){
@@ -145,11 +151,14 @@ public class StartUp : MonoBehaviour
 		}
 		else {
 			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
+			textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider.transform);	
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Arm " + (i).ToString() + "- Theta";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
+			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			if (i > 0){
 				newSlider.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,2], CultureInfo.InvariantCulture);
 		
@@ -159,6 +168,8 @@ public class StartUp : MonoBehaviour
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
 		sliderCount ++;
         	newSlider2.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		newSlider2.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider2.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		newSlider2.name = "Slider (" + (2*i+1).ToString() + ")";
 		//newSlider2.label = "Slider (" + (i).ToString() + ") Alpha";  
 		if (inputs[4*armsNo + 4 + i, 1] == "0"){
@@ -168,8 +179,12 @@ public class StartUp : MonoBehaviour
 		}
 		else {
 			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider2.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
+			textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider2.transform);
+			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
+			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Arm " + (i).ToString() + "- Alpha";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
@@ -183,6 +198,8 @@ public class StartUp : MonoBehaviour
 		//sliderCount ++;
         	//newSlider8.transform.SetParent(GameObject.Find("Canvas").transform, false);
 		newSlider8.name = "Slider (l" + (2*i).ToString() + ")";
+		newSlider8.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider8.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		//newSlider2.label = "Slider (" + (i).ToString() + ") Alpha";  
 		if (inputs[4*armsNo + 4 + i, 2] == "0"){
 			sliderCount --;
@@ -194,13 +211,17 @@ public class StartUp : MonoBehaviour
 ;
 		}
 		else {
-			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider8.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
-			Text myText = textObj.AddComponent<Text>();
-			myText.text = "Slider (" + (i).ToString() + ") length";
-			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-			myText.horizontalOverflow = HorizontalWrapMode.Overflow;
+			//GameObject textObj = new GameObject("myTextGO");
+			//textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		//textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider8.transform);
+			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
+			//Text myText = textObj.AddComponent<Text>();
+			//myText.text = "Slider (" + (i).ToString() + ") length";
+			//myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+			//myText.horizontalOverflow = HorizontalWrapMode.Overflow;
+			//textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			//textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			//newSlider8.GetComponent<RectTransform>().SetSizeWithCurrentAnchors( RectTranform.Axis.Horizontal, 150);
 			}
 		}
@@ -226,6 +247,8 @@ public class StartUp : MonoBehaviour
 		sliderCount ++;
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
         	newSlider3.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		newSlider3.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider3.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		newSlider3.name = "Slider (" + (2*armsNo).ToString() + ")";
 		//newSlider3.label = "Slider (" + (armsNo).ToString() + ") Theta";  
 		if (inputs[4*armsNo + 4 + armsNo, 0] == "0"){
@@ -235,17 +258,23 @@ public class StartUp : MonoBehaviour
 		}
 		else {
 			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider3.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
+			textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider3.transform);
+			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Hand " + (armsNo).ToString() + "- Theta";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
+			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			newSlider3.GetComponent<Slider>().value = float.Parse(inputs[armsNo*2,2], CultureInfo.InvariantCulture);
 		}
 		GameObject newSlider4 = (GameObject)GameObject.Instantiate(pPrefab2, new Vector3(98, -10 - sliderCount*20, 0), Quaternion.identity);
 		sliderCount ++;
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
         	newSlider4.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		newSlider4.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider4.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		newSlider4.name = "Slider (" + (2*armsNo +1).ToString() + ")";
 		//newSlider4.label = "Slider (" + (armsNo).ToString() + ") Alpha"; 
 		if (inputs[4*armsNo + 4 + armsNo, 1] == "0"){
@@ -255,11 +284,15 @@ public class StartUp : MonoBehaviour
 		}
 		else {
 			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider4.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
+			textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider4.transform);
+			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Hand " + (armsNo).ToString() + "- Alpha";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
+			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			newSlider4.GetComponent<Slider>().value = float.Parse(inputs[armsNo*2,2], CultureInfo.InvariantCulture);
 		}
 
@@ -280,23 +313,31 @@ public class StartUp : MonoBehaviour
 		sliderCount ++;
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
         	newSlider5.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		newSlider5.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider5.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		newSlider5.name = "Slider (" + (2*armsNo +2).ToString() + ")";
 		newSlider5.GetComponent<Slider>().maxValue = 100f;
 		newSlider5.GetComponent<Slider>().minValue = 30f;
 		newSlider5.GetComponent<Slider>().value = 100f;
 		//newSlider4.label = "Slider (" + (armsNo).ToString() + ") Alpha"; 
 		GameObject textObj2 = new GameObject("myTextGO");
-		textObj2.transform.SetParent(newSlider5.transform);
-		textObj2.transform.localPosition = new Vector3(150f,-32f,0f);
+		textObj2.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        	textObj2.transform.SetParent(GameObject.Find("Canvas").transform, false);
+		//textObj2.transform.SetParent(newSlider5.transform);
+		//textObj2.transform.localPosition = new Vector3(198.6f,-43f,0f);
 		Text myText2 = textObj2.AddComponent<Text>();
 		myText2.text = "Slider grab";
 		myText2.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
+		textObj2.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		textObj2.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		
 		GameObject newSlider9 = (GameObject)GameObject.Instantiate(pPrefab2, new Vector3(98, -10 - sliderCount*20, 0), Quaternion.identity);
 		//GameObject newSlider = Instantiate(Slider) as GameObject;
 		//sliderCount ++;
         	//newSlider9.transform.SetParent(GameObject.Find("Canvas").transform, false);
 		newSlider9.name = "Slider (l" + (2*armsNo).ToString() + ")";
+		newSlider9.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		newSlider9.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 		//newSlider2.label = "Slider (" + (i).ToString() + ") Alpha";  
 		Debug.Log(" ASDasdas" + inputs[5*armsNo + 4, 2]);
 		if (inputs[5*armsNo + 4, 2] == "0"){
@@ -306,13 +347,17 @@ public class StartUp : MonoBehaviour
 ;
 		}
 		else {
-			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.SetParent(newSlider9.transform);
-			textObj.transform.localPosition = new Vector3(150f,-32f,0f);
-			Text myText = textObj.AddComponent<Text>();
-			myText.text = "Slider (" + (armsNo).ToString() + ") length";
-			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-			myText.horizontalOverflow = HorizontalWrapMode.Overflow;
+			//GameObject textObj = new GameObject("myTextGO");
+			//textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		//textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//textObj.transform.SetParent(newSlider9.transform);
+			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
+			//Text myText = textObj.AddComponent<Text>();
+			//myText.text = "Slider (" + (armsNo).ToString() + ") length";
+			//myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+			//myText.horizontalOverflow = HorizontalWrapMode.Overflow;
+			//textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			//textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			newSlider9.GetComponent<Slider>().maxValue = 2*float.Parse(inputs[armsNo*2,0], CultureInfo.InvariantCulture);
 			newSlider9.GetComponent<Slider>().minValue = float.Parse(inputs[armsNo*2,0], CultureInfo.InvariantCulture);
 			newSlider9.GetComponent<Slider>().value = float.Parse(inputs[armsNo*2,0], CultureInfo.InvariantCulture);

@@ -702,5 +702,15 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 1280085581737489480, guid: 8c7aa87656ebb5645a09ef04d5a981e6,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280085581737489480, guid: 8c7aa87656ebb5645a09ef04d5a981e6,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 768
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c7aa87656ebb5645a09ef04d5a981e6, type: 3}
