@@ -56,6 +56,7 @@ public class StartUp : MonoBehaviour
 	}*/
 	GameObject.DestroyImmediate(parentObj);
 	parentObj = new GameObject("GameObject");
+	parentObj.AddComponent<Serial>();
 	parentObj.name = "GameObject";
 	InverseKinematics ik = parentObj.AddComponent<InverseKinematics>();
 	//DontDestroyOnLoad(parentObj);

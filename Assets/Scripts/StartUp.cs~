@@ -211,17 +211,17 @@ public class StartUp : MonoBehaviour
 ;
 		}
 		else {
-			GameObject textObj = new GameObject("myTextGO");
-			textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
-        		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+			//GameObject textObj = new GameObject("myTextGO");
+			//textObj.transform.position = new Vector3(229.4f, -30.4f -sliderCount*20, 0);
+        		//textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
 			//textObj.transform.SetParent(newSlider8.transform);
 			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
-			Text myText = textObj.AddComponent<Text>();
-			myText.text = "Slider (" + (i).ToString() + ") length";
-			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-			myText.horizontalOverflow = HorizontalWrapMode.Overflow;
-			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
-			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+			//Text myText = textObj.AddComponent<Text>();
+			//myText.text = "Slider (" + (i).ToString() + ") length";
+			//myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+			//myText.horizontalOverflow = HorizontalWrapMode.Overflow;
+			//textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			//textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 			//newSlider8.GetComponent<RectTransform>().SetSizeWithCurrentAnchors( RectTranform.Axis.Horizontal, 150);
 			}
 		}
