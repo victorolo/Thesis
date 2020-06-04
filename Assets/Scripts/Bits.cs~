@@ -36,7 +36,7 @@ public class Bits : MonoBehaviour
     void Update()
     {
 	if (useLocal == 0){
-		//this.transform.position = joint.transform.position + offset;// + joint.transform.InverseTransformPoint(offset);
+		this.transform.position = joint.transform.position + offset;// + joint.transform.InverseTransformPoint(offset);
 	}
 	else{
 		//this.transform.position = joint.transform.TransformPoint(offset/scale);
@@ -45,7 +45,7 @@ public class Bits : MonoBehaviour
 		this.transform.rotation = jointRot.transform.rotation;
 	}
 	else {
-		this.transform.rotation = Quaternion.Euler(new Vector3(0f, joint.transform.rotation.y, 0f));
+		//this.transform.rotation = Quaternion.Euler(new Vector3(0f, joint.transform.rotation.y, 0f));
 	}
     }
 }

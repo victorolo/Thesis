@@ -45,7 +45,8 @@ public class Bits : MonoBehaviour
 		this.transform.rotation = jointRot.transform.rotation;
 	}
 	else {
-		this.transform.rotation = Quaternion.Euler(new Vector3(0f, joint.transform.rotation.y, 0f));
+		//this.transform.rotation = Quaternion.Euler(new Vector3(0f, joint.transform.rotation.y, 0f));
+		this.transform.rotation = Quaternion.Euler(new Vector3( 0, joint.transform.rotation.eulerAngles.y, 0));
 	}
     }
 }
