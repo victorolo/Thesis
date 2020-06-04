@@ -53,7 +53,9 @@ public class RoboJoint3 : MonoBehaviour
     {
 	baseJoint = GameObject.Find("0");	
 	q2 = Quaternion.Euler(0f,0f,0f);
-	this.GetComponent<Collider>().enabled = false;
+	if (this.GetComponent<Collider>()){
+		this.GetComponent<Collider>().enabled = false;
+	}
 	prevRot[0] = Quaternion.Euler(0,0,0); 
 	IKReverse = false;
 	waitCount = 0;
@@ -190,7 +192,9 @@ public class RoboJoint3 : MonoBehaviour
 
 	if (waitCount >= 400){
 		if (nextJoint == null){
-			this.GetComponent<Collider>().enabled = true;
+			if (this.GetComponent<Collider>()){
+				//this.GetComponent<Collider>().enabled = true;
+			}
 		}
 		if (!this.GetComponent<Collider>().transform.root.GetComponent<InverseKinematics>().contIK){
 			if (theta + 0.99 <= targetTheta){

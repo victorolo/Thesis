@@ -35,9 +35,9 @@ public class Serial : MonoBehaviour
 	send = GameObject.Find("SerialButt").GetComponent<Button>();
 	send.GetComponent<Button>().onClick.AddListener(sendCommand);
 	slider0 = GameObject.Find("Slider (0)").GetComponent<Slider>(); 
-	slider1 = GameObject.Find("Slider (0)").GetComponent<Slider>(); 
-	slider2 = GameObject.Find("Slider (2)").GetComponent<Slider>(); 
-	grab = GameObject.Find("Slider (6)").GetComponent<Slider>();
+	slider1 = GameObject.Find("Slider (2)").GetComponent<Slider>(); 
+	slider2 = GameObject.Find("Slider (4)").GetComponent<Slider>(); 
+	grab = GameObject.Find("Slider (8)").GetComponent<Slider>();
     }
 
     void sendCommand(){
@@ -86,10 +86,10 @@ public class Serial : MonoBehaviour
 		}
 
 		if (found){
-			if (angle == 1){
+			if (angle == 0){
 				grab.value = 100;
 			}
-			if (angle == 0){
+			if (angle == 1){
 				grab.value = 30;
 			}
 		}

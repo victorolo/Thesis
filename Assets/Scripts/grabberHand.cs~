@@ -138,6 +138,8 @@ public class grabberHand : MonoBehaviour
 
 	}
 	waitCount ++;
+	//Physics.IgnoreCollision(parent.GetComponent<Collider>(), this.GetComponent<Collider>(), true);
+	
 	targetGrab = grabSlider.value; // both these should be created from the robi file
 	prevRot = this.transform.rotation;
 	prevPos = this.transform.position;

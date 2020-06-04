@@ -194,8 +194,10 @@ public class StartUp : MonoBehaviour
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
 			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
 			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
-			if (i > 0){	
-				newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,3], CultureInfo.InvariantCulture);
+			//if (i > 0){	
+				//newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,3], CultureInfo.InvariantCulture);
+			if (i < armsNo){	
+				newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i+1,3], CultureInfo.InvariantCulture);
 		
 			}
 		}
@@ -233,9 +235,13 @@ public class StartUp : MonoBehaviour
 		}
 	
 		GameObject obj3 = loadAndDisplayMesh(inputs[5*armsNo+6,0].Replace("\r", ""));
-		obj3.AddComponent<MeshCollider>();
-    		obj3.GetComponent<MeshCollider>().convex = true;
+		//obj3.AddComponent<MeshCollider>();
+    		//obj3.GetComponent<MeshCollider>().convex = true;
 		obj3.name = (armsNo).ToString();
+		var colli3 = obj3.AddComponent<NonConvexMeshCollider>();
+		colli3.avoidExceedingMesh = true;
+		colli3.boxesPerEdge = 20;
+		colli3.Calculate();
 		//obj3.AddComponent<MeshCollider>();
 		RoboJoint3 rbj3 = obj3.AddComponent<RoboJoint3>();
 		rbj3.length = Int32.Parse(inputs[armsNo*2,0]);

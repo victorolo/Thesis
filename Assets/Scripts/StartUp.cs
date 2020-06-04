@@ -238,6 +238,10 @@ public class StartUp : MonoBehaviour
 		obj3.AddComponent<MeshCollider>();
     		obj3.GetComponent<MeshCollider>().convex = true;
 		obj3.name = (armsNo).ToString();
+		var colli3 = obj3.AddComponent<NonConvexMeshCollider>();
+		colli3.avoidExceedingMesh = true;
+		colli3.boxesPerEdge = 20;
+		colli3.Calculate();
 		//obj3.AddComponent<MeshCollider>();
 		RoboJoint3 rbj3 = obj3.AddComponent<RoboJoint3>();
 		rbj3.length = Int32.Parse(inputs[armsNo*2,0]);
