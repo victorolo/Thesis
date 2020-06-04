@@ -27,9 +27,11 @@ public class RoboJoint : MonoBehaviour
 	public bool prevStop;
 	Rigidbody rb;
 	public float otherScale = 1f;
+	public Quaternion q2;
     // Start is called before the first frame update
     void Start()
     {
+	q2 = Quaternion.Euler(90f,0f,0);
 	waitCount = 0;
 	stop = false;
 	prevStop = false;
@@ -43,6 +45,8 @@ public class RoboJoint : MonoBehaviour
 	rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 	rb.isKinematic=true;
 	rb.mass = (float)Math.Pow(10,5);
+	this.transform.localScale = new Vector3(otherScale, otherScale, otherScale);
+
     }
 
     // Update is called once per frame
@@ -131,7 +135,10 @@ public class RoboJoint : MonoBehaviour
         }
 	Debug.Log(str); */
 	q = QuaternionFromMatrix(arr);
-	finalRot = Quaternion.Slerp(this.transform.rotation, q,  Time.deltaTime * smooth);
+	q2 *= q;
+	finalRot = Quaternion.Slerp(this.transform.rotation, q2,  Time.deltaTime * smooth);
+	q = q2;
+	q2 = Quaternion.Euler(90f,0f,0);
 	rb.MoveRotation(finalRot);	
 	rb.MovePosition(new Vector3 (0f,0f,0f));
 	//StartCoroutine(Example());

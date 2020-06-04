@@ -46,9 +46,13 @@ public class RoboJoint3 : MonoBehaviour
 	private int partNo;
 	public bool justCollided;
 	public bool rotGripper = true;
+	public Quaternion q2;
+	GameObject baseJoint;
     // Start is called before the first frame update
     void Start()
     {
+	baseJoint = GameObject.Find("0");	
+	q2 = Quaternion.Euler(0f,0f,0f);
 	this.GetComponent<Collider>().enabled = false;
 	prevRot[0] = Quaternion.Euler(0,0,0); 
 	IKReverse = false;
@@ -87,6 +91,7 @@ public class RoboJoint3 : MonoBehaviour
 		q = QuaternionFromMatrix(mat);
 		q = prevJoint.GetComponent<RoboJoint3>().q*q;
 	}
+	//prevRot[0] = q; 
 	Vector3 transl;
 	transl.x = mat.m03;
 	transl.y = mat.m13;
@@ -109,7 +114,7 @@ public class RoboJoint3 : MonoBehaviour
 
 	//this.transform.position = transl;	
 	//length = 1;
-		this.transform.localScale = new Vector3(otherScale, otherScale, otherScale);
+	this.transform.localScale = new Vector3(otherScale, otherScale, otherScale);
 	    }
 
     // Update is called once per frame
@@ -248,13 +253,15 @@ public class RoboJoint3 : MonoBehaviour
 
 	if (this.name == "1"){
 		q = QuaternionFromMatrix(mat);
-		q = (prevJoint.GetComponent<RoboJoint>().q*q).normalized;
+		Quaternion q3 = Quaternion.Inverse(prevJoint.GetComponent<RoboJoint>().q2);
+		q = (prevJoint.GetComponent<RoboJoint>().q*q3*q).normalized;
 	}
 	else
 	{
 		q = QuaternionFromMatrix(mat);
 		//q = (prevJoint.GetComponent<RoboJoint3>().q*q).normalized;
-		q = (prevJoint.GetComponent<RoboJoint3>().q*q).normalized;
+		Quaternion q3 = Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().q2);
+		q = (prevJoint.GetComponent<RoboJoint3>().q*q3*q).normalized;
 	}
 	Vector3 transl;
 	transl.x = mat.m03;
@@ -291,7 +298,9 @@ public class RoboJoint3 : MonoBehaviour
 	}
 	else{
 		if (!rotGripper){
-			rb.MoveRotation(modelRot.normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
+			//rb.MoveRotation(modelRot.normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
+			Quaternion q5 = Quaternion.Euler(baseJoint.transform.rotation.eulerAngles);
+			rb.MoveRotation((modelRot*q5*Quaternion.Inverse(baseJoint.GetComponent<RoboJoint>().q2)).normalized);
 		}
 		else {
 			rb.MoveRotation((finalRot*modelRot).normalized);//*Quaternion.Inverse(prevJoint.GetComponent<RoboJoint3>().modelRot));
@@ -345,7 +354,7 @@ public class RoboJoint3 : MonoBehaviour
 		//parentObject.transform.localScale = new Vector3((float)(1/currScale.x),(float)(1/currScale.y),(float)(1/currScale.z));//obj.transform.localScale;
 		//parentObject.transform.localPosition = new Vector3(0,0,0);
 		obj.transform.parent = parentObject.transform;
-		obj.transform.localScale = new Vector3(1,1,1);
+		//obj.transform.localScale = new Vector3(1,1,1);
 		parentObject.transform.Rotate(xRot, yRot, zRot);
 		return parentObject;
 

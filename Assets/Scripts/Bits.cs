@@ -25,7 +25,8 @@ public class Bits : MonoBehaviour
 		parentObject.transform.SetParent(joint.transform);
 		parentObject.name = "Scaler " + this.name;
 		parentObject.transform.position = joint.transform.TransformPoint(offset);
-		this.transform.position = joint.transform.TransformPoint(offset);
+		//this.transform.position = joint.transform.TransformPoint(offset);
+		this.transform.position = joint.transform.position + offset;// + joint.transform.InverseTransformPoint(offset);
 		this.transform.SetParent(parentObject.transform);
 	}
 	this.transform.localScale = new Vector3(scale, scale, scale);
@@ -38,10 +39,13 @@ public class Bits : MonoBehaviour
 		this.transform.position = joint.transform.position + offset;// + joint.transform.InverseTransformPoint(offset);
 	}
 	else{
-		this.transform.position = joint.transform.TransformPoint(offset/scale);
+		//this.transform.position = joint.transform.TransformPoint(offset/scale);
 	}
 	if (jointRotNum >= 0){
 		this.transform.rotation = jointRot.transform.rotation;
+	}
+	else {
+		this.transform.rotation = Quaternion.Euler(new Vector3(0f, joint.transform.rotation.y, 0f));
 	}
     }
 }

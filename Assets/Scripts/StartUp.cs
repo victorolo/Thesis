@@ -131,7 +131,9 @@ public class StartUp : MonoBehaviour
 
 		}
 			
-		if (inputs[7*armsNo+11,i*2] == "0"){
+		Debug.Log("Joint to render: " + i);
+	        Debug.Log(" value:  " + inputs[7*armsNo+11,i]);
+		if (inputs[7*armsNo+11,i].Trim() == "0"){
 			obj2.GetComponent<MeshRenderer>().enabled = false;
 			obj2.GetComponent<Collider>().enabled = false;
 		}
@@ -160,8 +162,10 @@ public class StartUp : MonoBehaviour
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf"); 
 			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
 			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
-			if (i > 0){
-				newSlider.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,2], CultureInfo.InvariantCulture);
+			if (i < armsNo){
+			//if (i >0){
+				//newSlider.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,2], CultureInfo.InvariantCulture);
+				newSlider.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i+1,2], CultureInfo.InvariantCulture);
 		
 			}
 		}
@@ -184,13 +188,16 @@ public class StartUp : MonoBehaviour
         		textObj.transform.SetParent(GameObject.Find("Canvas").transform, false);
 			//textObj.transform.SetParent(newSlider2.transform);
 			//textObj.transform.localPosition = new Vector3(198.6f,-43f,0f);
-			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
-			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+			Debug.Log(newSlider2.name);
 			Text myText = textObj.AddComponent<Text>();
 			myText.text = "Arm " + (i).ToString() + "- Alpha";
 			myText.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-			if (i > 0){	
-				newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,3], CultureInfo.InvariantCulture);
+			textObj.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			textObj.transform.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+			//if (i > 0){	
+				//newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i,3], CultureInfo.InvariantCulture);
+			if (i < armsNo){	
+				newSlider2.GetComponent<Slider>().value = float.Parse(inputs[armsNo+i+1,3], CultureInfo.InvariantCulture);
 		
 			}
 		}
