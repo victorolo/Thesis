@@ -272,12 +272,12 @@ public class grabberHand : MonoBehaviour
 				Destroy(cj);
 				rb.MoveRotation(parent.transform.rotation);
 				if (this.name == "hand 1"){
-					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*offsets.y/otherScale,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale)));
+					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale*offsets.x, (-sizes2.y/2 - sizes.y/2)/otherScale*offsets.y,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale*offsets.z)));
 					//Debug.Log(parent.transform.TransformPoint(new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*1.1f,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale)));
 				}
 
 				else if (this.name == "hand 2"){
-					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*offsets.y/otherScale, (sizes2.z/2 + sizes.z/2)*grab/100f/otherScale)));
+					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale*offsets.x, (-sizes2.y/2 - sizes.y/2)*offsets.y/otherScale, (sizes2.z/2 + sizes.z/2)*grab/100f/otherScale*offsets.z)));
 				}
 			}
 			//grabSlider.value = prevGrab;

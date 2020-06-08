@@ -102,6 +102,9 @@ public class RoboJoint3 : MonoBehaviour
 	prevRot[0] = q;
 	prevRot[1] = q;
 	prevRot[2] = q;
+	prevTheta[0] = theta; 
+	prevTheta[1] = theta; 
+	prevTheta[2] = theta; 
 
 	thisStop = true;
 	newPos = prevJoint.transform.TransformPoint(transl);
@@ -139,9 +142,6 @@ public class RoboJoint3 : MonoBehaviour
 		cj.anchor = new Vector3(0f, 0f, 0f);
 		cj.enableCollision = true; 
 		cj.connectedMassScale = 0;
-		//prevRot[0] = Quaternion.Euler(alpha,0,theta); 
-		prevRot[1] = Quaternion.Euler(alpha,0,theta);
-		prevRot[2] = Quaternion.Euler(alpha,0,theta);
 	}
 	if (waitCount > 100){
 		//rb.isKinematic=false;
@@ -505,7 +505,7 @@ public class RoboJoint3 : MonoBehaviour
 				theta = prevTheta[0];
 				newPos = prevPos[0];
 				finalRot = prevRot[0];
-				GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
+				//GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
 				thisStop = false;
 				justCollided = true;
 			}
@@ -658,7 +658,7 @@ public class RoboJoint3 : MonoBehaviour
 				prevTheta[0] = prevTheta[1];
 				prevPos[0] = prevPos[1];
 				prevRot[0] = prevRot[1];
-				GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
+				//GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
 				thisStop = false;
 				justCollided = true;
 			}

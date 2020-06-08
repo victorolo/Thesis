@@ -19,6 +19,11 @@ public class Base : MonoBehaviour
 	this.transform.localScale = new Vector3(scale, scale, scale);
 	this.transform.SetParent(child.transform, false);
        	baseQ = Quaternion.Inverse(baseJoint.transform.rotation); 
+	Vector3 pos = location;
+	pos.y = Terrain.activeTerrain.SampleHeight(transform.position) + Tools.GetDimensions(gameObject).y/2;
+	this.transform.position = pos;
+	baseJoint.GetComponent<RoboJoint>().yOff = pos.y + location.y;
+
     }
 
     // Update is called once per frame

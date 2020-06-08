@@ -28,6 +28,7 @@ public class RoboJoint : MonoBehaviour
 	Rigidbody rb;
 	public float otherScale = 1f;
 	public Quaternion q2 = Quaternion.Euler(0f,0f,0);
+	public float yOff=0;
     // Start is called before the first frame update
     void Start()
     {
@@ -78,7 +79,7 @@ public class RoboJoint : MonoBehaviour
 	targetTheta = GameObject.Find("Slider (0)").GetComponent<Slider>().value; // both these should be created from the robi file
 	targetAlpha = GameObject.Find("Slider (1)").GetComponent<Slider>().value;
 
-	if (Mathf.Abs(prevTheta[0]-theta) >= 3f){
+	if (Mathf.Abs(prevTheta[0]-theta) >= 1f){
 		prevTheta[2] = prevTheta[1];
 		prevRot[2] = prevRot[1];
 		prevTheta[1] = prevTheta[0];
@@ -87,8 +88,8 @@ public class RoboJoint : MonoBehaviour
 		prevTheta[0] = theta;
 		prevRot[0] = finalRot.normalized;
 	}
-	if (Mathf.Abs(prevAlpha[0] - alpha) >= 3f){
-		prevTheta[2] = prevAlpha[1];
+	if (Mathf.Abs(prevAlpha[0] - alpha) >= 1f){
+		prevAlpha[2] = prevAlpha[1];
 		prevRot[2] = prevRot[1];
 		prevAlpha[1] = prevAlpha[0];
 		prevRot[1] = prevRot[0];
@@ -164,7 +165,7 @@ public class RoboJoint : MonoBehaviour
 	q = q2;
 	q2 = q3;
 	rb.MoveRotation(finalRot);	
-	rb.MovePosition(new Vector3 (0f,0f,0f));
+	rb.MovePosition(new Vector3 (0f,yOff,0f));
 	//StartCoroutine(Example());
     }
 

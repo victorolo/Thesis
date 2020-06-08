@@ -122,6 +122,7 @@ public class StartUp : MonoBehaviour
 			int refY = Int32.Parse(inputs[7*armsNo+14+i,1]);
 			int refZ = Int32.Parse(inputs[7*armsNo+14+i,2]);
 			rbj2.q2 = Quaternion.Euler(refX,refY,refZ);
+			rbj2.yOff = float.Parse(inputs[7*armsNo+9, 1], CultureInfo.InvariantCulture);
 		}
 		else{
 			RoboJoint3 rbj2 = obj2.AddComponent<RoboJoint3>();
@@ -489,11 +490,12 @@ GameObject loadAndDisplayMesh(string path)
 
     //Load Mesh
     //Debug.Log(Application.dataPath);
-    //string newPath = Application.dataPath + "\\Robots\\" + path;
+    string newPath = Application.dataPath + "\\Robots\\" + path;
     //string newPath = "C:\\Users\\Victor\\Saved Games" + "\\Robots\\" + path;
     //string newPath = "C:\\Users\\Victor\\Documents\\" +  path;
-    //newPath = newPath.Replace("\\", "/");
-    Mesh mesh = FastObjImporter.Instance.ImportFile(path);
+    newPath = newPath.Replace("\\", "/");
+    //Mesh mesh = FastObjImporter.Instance.ImportFile(path);
+    Mesh mesh = FastObjImporter.Instance.ImportFile(newPath);
 
     //return null;
 
