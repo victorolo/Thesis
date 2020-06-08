@@ -29,6 +29,7 @@ public class grabberHand : MonoBehaviour
     public float otherScale;
     private bool thisStop;
     public bool justCollided;
+    public Vector3 offsets = new Vector3(1f,1f,1f);
     // Start is called before the first frame update
     void Start()
     {
@@ -79,7 +80,7 @@ public class grabberHand : MonoBehaviour
 		Debug.Log((-sizes2.z/2 - sizes.z/2) + "    " + (sizes2.z/2 + sizes.z/2));
 		//Debug.Log(sizes);
 		if (this.name == "hand 1"){
-			this.transform.position = (parent.transform.position + new Vector3(0.1f + sizes2.x/2 + sizes.x/2, 0,-sizes2.z/2 - sizes.z/2));
+			this.transform.position = (parent.transform.position + new Vector3(1f + sizes2.x/2 + sizes.x/2, 0,-sizes2.z/2 - sizes.z/2));
 		}
 
 		else if (this.name == "hand 2"){
@@ -98,13 +99,15 @@ public class grabberHand : MonoBehaviour
 		//Debug.Log(sizes);
 		if (this.name == "hand 1"){
 			//this.transform.position = (parent.transform.position + new Vector3(0.15f + sizes2.x/2 + sizes.x/2, 0,-sizes2.z/2 - sizes.z/2));
-			this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*0.7f,-sizes2.z/2 - sizes.z/2));
+			//this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*0.7f,-sizes2.z/2 - sizes.z/2));
+			this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2*offsets.x, (-sizes2.y/2 - sizes.y/2)*offsets.y,-sizes2.z/2 - sizes.z/2));
 		}
 
 		else if (this.name == "hand 2"){
 			//this.transform.eulerAngles = new Vector3(180f, 0f,0f);
 			//this.transform.position = (parent.transform.position + new Vector3(0.15f + sizes2.x/2 + sizes.x/2, 0, sizes2.z/2 + sizes.z/2));
-			this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*0.7f, sizes2.z/2 + sizes.z/2));
+			//this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*0.7f, sizes2.z/2 + sizes.z/2));
+			this.transform.position = (parent.transform.position + new Vector3(sizes2.x/2*offsets.x, (-sizes2.y/2 - sizes.y/2)*offsets.y, sizes2.z/2 + sizes.z/2));
 		}
 		rb.isKinematic = false;
 		this.transform.rotation = (parent.transform.rotation);
@@ -119,7 +122,7 @@ public class grabberHand : MonoBehaviour
 			//cj.zMotion = ConfigurableJointMotion.Limited;
 			cj.zMotion = ConfigurableJointMotion.Locked;
 			SoftJointLimit linLim = new SoftJointLimit();
-			linLim.limit =  sizes2.z/2;;
+			linLim.limit =  sizes2.z/2*offsets.z;
 			cj.linearLimit = linLim;
 			cj.angularXMotion = ConfigurableJointMotion.Locked;
 			cj.angularYMotion = ConfigurableJointMotion.Locked;
@@ -213,12 +216,12 @@ public class grabberHand : MonoBehaviour
 			cj.autoConfigureConnectedAnchor = false;
 			Vector3 tempScale = cj.connectedAnchor;
 			if (this.name == "hand 1"){
-				tempScale.z = -grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale;
+				tempScale.z = -grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale*offsets.z;
 				cj.connectedAnchor = tempScale; 
 			}
 
 			else if (this.name == "hand 2"){
-				tempScale.z = grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale;
+				tempScale.z = grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale*offsets.z;
 				cj.connectedAnchor = tempScale; 
 			}
 		}
@@ -249,6 +252,16 @@ public class grabberHand : MonoBehaviour
 
 	private void OnCollisionStay(Collision col){
 		Debug.Log( "this: " + this.name + " is inside : " + col.collider.gameObject.name);
+
+		if (col.collider.gameObject.name == "Terrain"){
+			GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
+			//this.transform.position = prevPos;
+			//this.transform.rotation = prevRot;
+			this.transform.rotation = (parent.transform.rotation);
+
+			thisStop = true;
+			Debug.Log("ran stop");
+		}
 		if (col.collider.gameObject.name != "Terrain"){
 			if (this.GetComponent<Collider>().transform.root == col.collider.transform.root && this.name == "hand 1" && col.collider.gameObject.name != "hand 2"){
 				GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
@@ -259,12 +272,12 @@ public class grabberHand : MonoBehaviour
 				Destroy(cj);
 				rb.MoveRotation(parent.transform.rotation);
 				if (this.name == "hand 1"){
-					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*0.7f/otherScale,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale)));
+					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*offsets.y/otherScale,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale)));
 					//Debug.Log(parent.transform.TransformPoint(new Vector3(sizes2.x/2, (-sizes2.y/2 - sizes.y/2)*1.1f,(-sizes2.z/2 - sizes.z/2)*grab/100f/otherScale)));
 				}
 
 				else if (this.name == "hand 2"){
-					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*0.7f/otherScale, (sizes2.z/2 + sizes.z/2)*grab/100f/otherScale)));
+					rb.MovePosition(parent.transform.TransformPoint(new Vector3(sizes2.x/2/otherScale, (-sizes2.y/2 - sizes.y/2)*offsets.y/otherScale, (sizes2.z/2 + sizes.z/2)*grab/100f/otherScale)));
 				}
 			}
 			//grabSlider.value = prevGrab;
@@ -276,12 +289,12 @@ public class grabberHand : MonoBehaviour
 			else{
 				Vector3 tempScale = cj.connectedAnchor;
 				if (this.name == "hand 1"){
-					tempScale.z = -grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale;
+					tempScale.z = -grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale*offsets.z;
 					cj.connectedAnchor = tempScale; 
 				}
 
 				else if (this.name == "hand 2"){
-					tempScale.z = grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale;
+					tempScale.z = grab/100f * (sizes2.z/2 + sizes.z/2)/otherScale*offsets.z;
 					cj.connectedAnchor = tempScale; 
 				}
 			}
@@ -317,6 +330,15 @@ public class grabberHand : MonoBehaviour
 	}
 	private void OnCollisionEnter(Collision col){
 		Debug.Log( "this: " + this.name + " is inside : " + col.collider.gameObject.name);
+		if (col.collider.gameObject.name == "Terrain"){
+			GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
+			//this.transform.position = prevPos;
+			//this.transform.rotation = prevRot;
+			this.transform.rotation = (parent.transform.rotation);
+
+			thisStop = true;
+			Debug.Log("ran stop");
+		}
 		if (col.collider.gameObject.name != "Terrain"){
 
 		if (this.GetComponent<Collider>().transform.root == col.collider.transform.root && this.name == "hand 1" && col.collider.gameObject.name != "hand 2"){

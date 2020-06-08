@@ -183,7 +183,8 @@ public class Limb : MonoBehaviour
 		parentObject.transform.localScale = new Vector3(oScale, oScale, oScale);//obj.transform.localScale;
 		parentObject.transform.localPosition = new Vector3(0,0,0);
 		obj.transform.parent = parentObject.transform;
-		obj.transform.localScale = new Vector3(xScale,otherScale,otherScale);
+		//obj.transform.localScale = new Vector3(xScale,otherScale,otherScale);
+		//obj.transform.localScale = new Vector3(xScale,otherScale,otherScale);
 		//parentObject.transform.localScale = new Vector3((float)0.2,(float)0.2,(float)0.2);	
 		return parentObject;
 	}

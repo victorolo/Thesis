@@ -118,6 +118,10 @@ public class StartUp : MonoBehaviour
 		obj2.name = i.ToString();
 		if (i == 0){
 			RoboJoint rbj2 = obj2.AddComponent<RoboJoint>();
+			int refX = Int32.Parse(inputs[7*armsNo+13+i,0]);
+			int refY = Int32.Parse(inputs[7*armsNo+13+i,1]);
+			int refZ = Int32.Parse(inputs[7*armsNo+13+i,2]);
+			rbj2.q2 = Quaternion.Euler(refX,refY,refZ);
 		}
 		else{
 			RoboJoint3 rbj2 = obj2.AddComponent<RoboJoint3>();
@@ -126,8 +130,13 @@ public class StartUp : MonoBehaviour
 			rbj2.xRot = Int32.Parse(inputs[armsNo*2+1+i,0]);
 			rbj2.yRot = Int32.Parse(inputs[armsNo*2+1+i,1]);
 			rbj2.zRot = Int32.Parse(inputs[armsNo*2+1+i,2]);
+
 			//rbj2.theta = float.Parse(inputs[armsNo+i,1], CultureInfo.InvariantCulture);
 			//rbj2.alpha = float.Parse(inputs[armsNo+i,2], CultureInfo.InvariantCulture);
+			int refX = Int32.Parse(inputs[7*armsNo+14+i,0]);
+			int refY = Int32.Parse(inputs[7*armsNo+14+i,1]);
+			int refZ = Int32.Parse(inputs[7*armsNo+14+i,2]);
+			rbj2.q2 = Quaternion.Euler(refX,refY,refZ);
 
 		}
 			
@@ -235,15 +244,19 @@ public class StartUp : MonoBehaviour
 		}
 	
 		GameObject obj3 = loadAndDisplayMesh(inputs[5*armsNo+6,0].Replace("\r", ""));
-		//obj3.AddComponent<MeshCollider>();
-    		//obj3.GetComponent<MeshCollider>().convex = true;
+		obj3.AddComponent<MeshCollider>();
+    		obj3.GetComponent<MeshCollider>().convex = true;
 		obj3.name = (armsNo).ToString();
 		var colli3 = obj3.AddComponent<NonConvexMeshCollider>();
 		colli3.avoidExceedingMesh = true;
 		colli3.boxesPerEdge = 20;
-		colli3.Calculate();
+		//colli3.Calculate();
 		//obj3.AddComponent<MeshCollider>();
 		RoboJoint3 rbj3 = obj3.AddComponent<RoboJoint3>();
+		int refX3 = Int32.Parse(inputs[8*armsNo+14,0]);
+		int refY3 = Int32.Parse(inputs[8*armsNo+14,1]);
+		int refZ3 = Int32.Parse(inputs[8*armsNo+14,2]);
+		rbj3.q2 = Quaternion.Euler(refX3,refY3,refZ3);
 		rbj3.length = Int32.Parse(inputs[armsNo*2,0]);
 		Debug.Log(inputs[armsNo*2, 1]); 
 		rbj3.d = float.Parse(inputs[armsNo*2 ,1], CultureInfo.InvariantCulture);
@@ -389,6 +402,10 @@ public class StartUp : MonoBehaviour
 		obj5.transform.SetParent(parentObj.transform);
 		gh5.parent = obj3;
 		gh5.jointParent = obj3;
+		gh5.offsets.x = float.Parse(inputs[7*armsNo+13, 0], CultureInfo.InvariantCulture);
+		gh5.offsets.y = float.Parse(inputs[7*armsNo+13, 1], CultureInfo.InvariantCulture);
+		gh5.offsets.z = float.Parse(inputs[7*armsNo+13, 2], CultureInfo.InvariantCulture);
+
 		//gh5.xscale = 2f;
 
 		gh5.sliderNo = newSlider5.name;
@@ -406,6 +423,10 @@ public class StartUp : MonoBehaviour
 		gh6.jointParent = obj3;
 		gh6.xscale = 2f;
 		gh6.sliderNo = gh5.sliderNo;
+		gh6.offsets.x = float.Parse(inputs[7*armsNo+13, 0], CultureInfo.InvariantCulture);
+		gh6.offsets.y = float.Parse(inputs[7*armsNo+13, 1], CultureInfo.InvariantCulture);
+		gh6.offsets.z = float.Parse(inputs[7*armsNo+13, 2], CultureInfo.InvariantCulture);
+
 
 
 		GameObject obj7 = loadAndDisplayMesh(inputs[4*armsNo+2,0].Replace("\r", ""));
@@ -423,22 +444,22 @@ public class StartUp : MonoBehaviour
 		b7.offset.z = float.Parse(inputs[7*armsNo+9, 2], CultureInfo.InvariantCulture);
 		b7.scale = float.Parse(inputs[7*armsNo+10, 0], CultureInfo.InvariantCulture);
 
-		int bitsNo = Int32.Parse(inputs[7*armsNo+13,0]);
+		int bitsNo = Int32.Parse(inputs[8*armsNo+15,0]);
 		GameObject obj8;
 		for (int k = 0; k < bitsNo; k ++){
-			Debug.Log(inputs[7*armsNo+14 + k,0].Replace("\r", ""));
-			obj8 = loadAndDisplayMesh(inputs[7*armsNo+14 + k,0].Replace("\r", ""));
+			Debug.Log(inputs[8*armsNo+15 + k,0].Replace("\r", ""));
+			obj8 = loadAndDisplayMesh(inputs[8*armsNo+16 + k,0].Replace("\r", ""));
 			//obj8.AddComponent<MeshCollider>();
 			//obj8.GetComponent<MeshCollider>().convex = true;
 			obj8.name = "bit" + k.ToString();
 			Bits bit = obj8.AddComponent<Bits>();
-			bit.jointNum = (inputs[7*armsNo+14 + k,1].Replace("\r", ""));
-			bit.jointRotNum = Int32.Parse(inputs[7*armsNo+14 + k,2].Replace("\r", ""));
-			bit.scale = float.Parse(inputs[7*armsNo+14 + k,3].Replace("\r", ""));
-			bit.offset.x = float.Parse(inputs[7*armsNo+14 + k,4].Replace("\r", ""));
-			bit.offset.y = float.Parse(inputs[7*armsNo+14 + k,5].Replace("\r", ""));
-			bit.offset.z = float.Parse(inputs[7*armsNo+14 + k,6].Replace("\r", ""));
-			bit.useLocal = Int32.Parse(inputs[7*armsNo+14 + k,7].Replace("\r", ""));
+			bit.jointNum = (inputs[8*armsNo+16 + k,1].Replace("\r", ""));
+			bit.jointRotNum = Int32.Parse(inputs[8*armsNo+16 + k,2].Replace("\r", ""));
+			bit.scale = float.Parse(inputs[8*armsNo+16 + k,3].Replace("\r", ""));
+			bit.offset.x = float.Parse(inputs[8*armsNo+16 + k,4].Replace("\r", ""));
+			bit.offset.y = float.Parse(inputs[8*armsNo+16 + k,5].Replace("\r", ""));
+			bit.offset.z = float.Parse(inputs[8*armsNo+16 + k,6].Replace("\r", ""));
+			bit.useLocal = Int32.Parse(inputs[8*armsNo+16 + k,7].Replace("\r", ""));
 		}
 		
     }

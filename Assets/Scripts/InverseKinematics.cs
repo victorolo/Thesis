@@ -94,8 +94,8 @@ public class InverseKinematics : MonoBehaviour
 	dO = GetDeltaOrientation(true);
 	for (int i = 0; i < dO.Length; i++) {
 		angles[i] = dO[i] * step/(dO.Length - i);
-		angleDiff[i] = Mathf.Ceil(dO[i] * step/(dO.Length - i));
-		Debug.Log(angleDiff[i]);
+		angleDiff[i] = dO[i] * step/(dO.Length - i);
+		//Debug.Log("dO : " +  dO[i] + " diff = " + angleDiff[i]);
 	}
         
 	// update angles

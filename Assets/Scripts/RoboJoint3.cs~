@@ -46,17 +46,16 @@ public class RoboJoint3 : MonoBehaviour
 	private int partNo;
 	public bool justCollided;
 	public bool rotGripper = true;
-	public Quaternion q2;
+	public Quaternion q2 = Quaternion.Euler(0f,0f,0f);
 	GameObject baseJoint;
     // Start is called before the first frame update
     void Start()
     {
 	baseJoint = GameObject.Find("0");	
-	q2 = Quaternion.Euler(0f,0f,0f);
+	//q2 = Quaternion.Euler(0f,0f,0f);
 	if (this.GetComponent<Collider>()){
 		this.GetComponent<Collider>().enabled = false;
 	}
-	prevRot[0] = Quaternion.Euler(0,0,0); 
 	IKReverse = false;
 	waitCount = 0;
 	collided = false;
@@ -101,6 +100,9 @@ public class RoboJoint3 : MonoBehaviour
         Vector3 currPos = this.transform.position;	
 	prevPos[0] = newPos;
 	prevRot[0] = q;
+	prevRot[1] = q;
+	prevRot[2] = q;
+
 	thisStop = true;
 	newPos = prevJoint.transform.TransformPoint(transl);
 	//this.transform.position = newPos;
@@ -137,6 +139,9 @@ public class RoboJoint3 : MonoBehaviour
 		cj.anchor = new Vector3(0f, 0f, 0f);
 		cj.enableCollision = true; 
 		cj.connectedMassScale = 0;
+		//prevRot[0] = Quaternion.Euler(alpha,0,theta); 
+		prevRot[1] = Quaternion.Euler(alpha,0,theta);
+		prevRot[2] = Quaternion.Euler(alpha,0,theta);
 	}
 	if (waitCount > 100){
 		//rb.isKinematic=false;
@@ -193,7 +198,7 @@ public class RoboJoint3 : MonoBehaviour
 	if (waitCount >= 400){
 		if (nextJoint == null){
 			if (this.GetComponent<Collider>()){
-				this.GetComponent<Collider>().enabled = true;
+				this.GetComponent<Collider>().enabled = false;
 			}
 		}
 		if (!this.GetComponent<Collider>().transform.root.GetComponent<InverseKinematics>().contIK){
@@ -399,16 +404,16 @@ public class RoboJoint3 : MonoBehaviour
 		//return; 
 		thetaSlider.value = prevTheta[1];//theta + 10*(theta-prevTheta[0]);
 		alphaSlider.value = prevAlpha[1];//prevAlpha[0] + 10*(alpha-prevAlpha[0]);
+		prevAlpha[0] = prevAlpha[1];
+		prevTheta[0] = prevTheta[1];
+		prevPos[0] = prevPos[1];
+		prevRot[0] = prevRot[1];
 		rb.MovePosition(prevPos[0]);
 		rb.MoveRotation(prevRot[0].normalized);
 		alpha = prevAlpha[0];
 		theta = prevTheta[0];
 		newPos = prevPos[0];
 		finalRot = prevRot[0];
-		prevAlpha[0] = prevAlpha[1];
-		prevTheta[0] = prevTheta[1];
-		prevPos[0] = prevPos[1];
-		prevRot[0] = prevRot[1];
 		//if(this.name == "2")
 		//Debug.Log(prevTheta[0]);
 		thisStop = true;
@@ -420,7 +425,7 @@ public class RoboJoint3 : MonoBehaviour
 			//Debug.Log( "this: " + this.name + " is inside : " + col.collider.gameObject.name);
 		//rb.velocity = new Vector3(0,0,0);
 		//return; 
-		if (this.GetComponent<Collider>().transform.root == col.collider.transform.root){
+		if (this.GetComponent<Collider>().transform.root == col.collider.transform.root || col.collider.gameObject.name == "Terrain"){
 			Debug.Log( "this: " + this.name + " is inside : " + col.collider.gameObject.name);
 			Vector3 normal = col.contacts[0].normal;
 			if (IKReverse){
@@ -488,6 +493,10 @@ public class RoboJoint3 : MonoBehaviour
 				}
 			}
 			else{
+				prevAlpha[0] = prevAlpha[1];
+				prevTheta[0] = prevTheta[1];
+				prevPos[0] = prevPos[1];
+				prevRot[0] = prevRot[1];
 				thetaSlider.value = prevTheta[0];//theta + 10*(prevTheta-theta);
 				alphaSlider.value = prevAlpha[0];//alpha + 10*(prevAlpha-alpha);
 				rb.MovePosition(prevPos[0]);
@@ -496,10 +505,6 @@ public class RoboJoint3 : MonoBehaviour
 				theta = prevTheta[0];
 				newPos = prevPos[0];
 				finalRot = prevRot[0];
-				prevAlpha[0] = prevAlpha[1];
-				prevTheta[0] = prevTheta[1];
-				prevPos[0] = prevPos[1];
-				prevRot[0] = prevRot[1];
 				GameObject.Find("0").GetComponent<RoboJoint>().stop = true;
 				thisStop = false;
 				justCollided = true;
@@ -510,7 +515,7 @@ public class RoboJoint3 : MonoBehaviour
 		Debug.Log( "this: " + this.name + " collided with : " + col.collider.gameObject.name);
 		//rb.velocity = new Vector3(0,0,0);
 		//return; 
-		if (this.GetComponent<Collider>().transform.root == col.collider.transform.root){
+		if (this.GetComponent<Collider>().transform.root == col.collider.transform.root || col.collider.gameObject.name == "Terrain"){
 			//Debug.Log( "this: " + this.name + " collided with : " + col.collider.gameObject.name);
         	//Debug.Log("2 " + Time.time);
 	//if (waitCount > 200){
